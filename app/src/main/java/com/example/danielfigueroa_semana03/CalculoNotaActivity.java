@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,7 @@ public class CalculoNotaActivity extends AppCompatActivity {
     private EditText EjercicioSemanal;
     private Button BotonCalcular;
     public ConstraintLayout Fondo;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,9 @@ public class CalculoNotaActivity extends AppCompatActivity {
         BotonCalcular = findViewById(R.id.BotonCalcular);
         EjercicioSemanal = findViewById(R.id.EjercicioSemanal);
 
+        sharedPreferences = getSharedPreferences("Preferencias", MODE_PRIVATE);
+        cambiarColor();
+
 
         BotonCalcular.setOnClickListener(
                 (v)->{
@@ -49,7 +55,7 @@ public class CalculoNotaActivity extends AppCompatActivity {
                     Intent i = new Intent(this, ResultadoActivity.class);
 
                     Intent Activity = getIntent(); //esta actividad
-                    String username = Activity.getStringExtra("username");
+                    String username = getIntent().getExtras().getString("Username");
                     i.putExtra("Username",username);
                     i.putExtra("resultado",resultado); //mandando un elemento de una actividad ala otra
 
@@ -59,4 +65,15 @@ public class CalculoNotaActivity extends AppCompatActivity {
     }
 
 
+    public void cambiarColor(){ //aqui selecciona entre los casos de shared prefences
+        int color = sharedPreferences.getInt("color", 0);
+        switch(color){
+            case 1: Fondo.setBackgroundColor(Color.CYAN);
+                break;
+            case 2: Fondo.setBackgroundColor(Color.YELLOW);
+                break;
+            case 3: Fondo.setBackgroundColor(Color.RED);
+                break;
+        }
+    }
 }
